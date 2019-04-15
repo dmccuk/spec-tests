@@ -3,26 +3,28 @@ ServerSpec installation walk-through
 ServerSpec install
 Install the following packages:
 
+````
 # cd /opt
 # git clone https://github.com/dmccuk/spec-tests.git
 # sudo apt-get install ruby bundler  
+````
 
 Create this file:
-
+````
 # sudo vi Gemfile 
-
+````
 Add this contents:
 ==below this line==
-
+````
 source 'https://rubygems.org'
 gem 'serverspec'
 gem 'rake', '~>12.0.0'
 gem 'net-ssh', '~>3.0.2'
-
+````
 ==above this line==
 
 Run the following commands:
-
+````
 # sudo bundle 
 # sudo gem install serverspec 
 # sudo serverspec-init 
@@ -45,13 +47,13 @@ Input target host name: web01.example.com
  + .rspec
 # sudo cp Rakefile Rakefile.OLD 
 # sudo vi Rakefile 
-
+````
 Hold down "d" to delete all the contents of the file. Then press "Esc" and "i" to insert.
 
 Add this contents:
 
 ==below this line==
-
+````
 require 'rake'
 require 'rspec/core/rake_task'
 hosts = %w(
@@ -71,18 +73,19 @@ namespace :spec do
     end
   end
 end
+````
 ==above this line==
 
 Now to create our tests:
-
+````
 # sudo mkdir /opt/spec-tests/spec/base 
 # sudo vi /opt/spec-tests/spec/base/base_spec.rb 
-
+````
 Add this contents:
 
 
 ==below this line==
-
+````
 require 'spec_helper'
 describe package('nginx') do
   it { should be_installed }
@@ -97,21 +100,21 @@ end
 describe port(22) do
   it { should be_listening }
 end
-
+````
 ==above this line==
 
 Run these commands
-
+````
 # cd /opt/spec-tests 
 # sudo mkdir reports 
 # sudo chmod 777 reports 
-
+````
 Setup a private/public key pair:
-
+````
 # cd /home/vagrant 
-
+````
 Just keep hitting enter until it finishes for the command below:
-
+````
 # ssh-keygen
 Generating public/private rsa key pair.
 Enter file in which to save the key (/home/vagrant/.ssh/id_rsa):
@@ -135,9 +138,9 @@ The key's randomart image is:
 +-----------------+
 # cat .ssh/id_rsa.pub 
 ...Copy...your...public...key..output...
-
+````
 Now login to web01. You probably already have it open:
-
+````
 vagrant@web01:~$ vi .ssh/authorized_keys 
 
  * Press SHIFT+G 
@@ -146,18 +149,19 @@ Now cut and paste your Key from the puppet master in here.
  * Press - Esc 
  * Then - SHIFT+: 
  * Now press - wq!  ENTER
-
+````
 Test your key works.
 
 Back on the puppet master run the following command:
-
+````
 # cd 
 #  ssh <server> uptime 
 (the first time you will get a message prompt - Answer Yes)
  06:55:36 up 1 day, 14:01,  0 users,  load average: 0.00, 0.04, 0.07
+````
 
-# If you get this we can move on to running the tests:
-
+If you get this we can move on to running the tests:
+````
 # cd /opt/spec-tests 
 
 # rake spec
@@ -173,5 +177,5 @@ Port "22"
   should be listening
 Finished in 0.92661 seconds (files took 0.62907 seconds to load)
 5 examples, 0 failures
-
+````
 Congratulations!
