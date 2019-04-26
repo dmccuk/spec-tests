@@ -6,6 +6,7 @@ Install the following packages:
 ````
 # cd /opt
 # git clone https://github.com/dmccuk/spec-tests.git
+# cd spec-tests
 # sudo apt-get install ruby bundler  
 ````
 
@@ -90,7 +91,7 @@ require 'spec_helper'
 describe package('nginx') do
   it { should be_installed }
 end
-describe service('puppet') do
+describe service('nginx') do
   it { should be_enabled }
   it { should be_running }
 end
@@ -100,6 +101,7 @@ end
 describe port(22) do
   it { should be_listening }
 end
+
 ````
 ==above this line==
 
@@ -109,6 +111,7 @@ Run these commands
 # sudo mkdir reports 
 # sudo chmod 777 reports 
 ````
+Only do the following if you don't already have an SSH-KEY PAIR setup.
 Setup a private/public key pair:
 ````
 # cd /home/vagrant 
@@ -161,21 +164,37 @@ Back on the puppet master run the following command:
 ````
 
 If you get this we can move on to running the tests:
+
+Update the Rakefile with the servers you want to run against:
+````
+hosts = %w(
+  <server1>
+  <server2>
+)
+````
+Replace server1 &2 adding the DNS long name for your servers. I.E: ec2-51-56-173-156.eu-west-1.compute.amazonaws.com
+
 ````
 # cd /opt/spec-tests 
 
-# rake spec
-/usr/bin/ruby1.9.1 -I/var/lib/gems/1.9.1/gems/rspec-support-3.6.0/lib:/var/lib/gems/1.9.1/gems/rspec-core-3.6.0/lib /var/lib/gems/1.9.1/gems/rspec-core-3.6.0/exe/rspec --pattern spec/\{base,app,users,network,ssh,\<new\ folder\?\>,web\}/\*_spec.rb --format documentation --format html --out /opt/spec-tests/reports/web01.html
+$ rake spec
+/usr/bin/ruby2.3 -I/var/lib/gems/2.3.0/gems/rspec-support-3.8.0/lib:/var/lib/gems/2.3.0/gems/rspec-core-3.8.0/lib /var/lib/gems/2.3.0/gems/rspec-core-3.8.0/exe/rspec --pattern spec/\{base,ec\}/\*_spec.rb
+
 Package "nginx"
   should be installed
-Service "puppet"
+
+Service "nginx"
   should be enabled
   should be running
+
 Port "80"
   should be listening
+
 Port "22"
   should be listening
-Finished in 0.92661 seconds (files took 0.62907 seconds to load)
+
+Finished in 2.55 seconds (files took 1.49 seconds to load)
 5 examples, 0 failures
 ````
+
 Congratulations!
