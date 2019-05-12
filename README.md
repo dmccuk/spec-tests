@@ -49,6 +49,11 @@ Input target host name: web01.example.com
 # sudo cp Rakefile Rakefile.OLD 
 # sudo vi Rakefile 
 ````
+You will see an error because we already have the file in place as par of the git clone.
+
+<details>
+ <summary>Expand if Not doing the course</summary>
+  <p>
 Hold down "d" to delete all the contents of the file. Then press "Esc" and "i" to insert.
 
 Add this contents:
@@ -105,13 +110,18 @@ end
 ````
 ==above this line==
 
+</p></details>
+
 Run these commands
 ````
 # cd /opt/spec-tests 
 # sudo mkdir reports 
 # sudo chmod 777 reports 
 ````
-Only do the following if you don't already have an SSH-KEY PAIR setup.
+
+<details>
+ <summary>Only do the following if you don't already have an SSH-KEY PAIR setup.</summary>
+  <p>
 Setup a private/public key pair:
 ````
 # cd /home/vagrant 
@@ -164,6 +174,8 @@ Back on the puppet master run the following command:
 ````
 
 If you get this we can move on to running the tests:
+
+</p></details>
 
 Update the Rakefile with the servers you want to run against:
 ````
