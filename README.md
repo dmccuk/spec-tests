@@ -122,6 +122,7 @@ Run these commands
 <details>
  <summary>Only do the following if you don't already have an SSH-KEY PAIR setup.</summary>
   <p>
+    
 Setup a private/public key pair:
 ````
 # cd /home/vagrant 
@@ -172,7 +173,6 @@ Back on the puppet master run the following command:
 (the first time you will get a message prompt - Answer Yes)
  06:55:36 up 1 day, 14:01,  0 users,  load average: 0.00, 0.04, 0.07
 ````
-
 If you get this we can move on to running the tests:
 
 </p></details>
