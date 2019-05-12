@@ -209,4 +209,18 @@ Finished in 2.55 seconds (files took 1.49 seconds to load)
 5 examples, 0 failures
 ````
 
-Congratulations!
+Congratulations! You have successfully tested the actual state of your infrastructure.
+
+Check https://serverspec.org/resource_types.html for more tests.
+
+## Reports:
+
+Copy one of the reports generated to the /vagrant folder on the devops-vm. You can access this from your laptop and open the webpage to view the results.
+
+````
+vagrant@devops-box:/opt/spec-tests$ cp reports/ec2-3-8-126-230.eu-west-2.compute.amazonaws.com.html /vagrant/
+````
+
+
+
+
