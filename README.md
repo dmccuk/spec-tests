@@ -75,7 +75,6 @@ Input target host name: web01.example.com
  + .rspec
 
 # cat Rakefile 
-````
 require 'rake'
 require 'rspec/core/rake_task'
 hosts = %w(
