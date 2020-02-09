@@ -3,6 +3,8 @@ ServerSpec installation walk-through
 ServerSpec install
 Install the following packages:
 
+  * For the purposes of this test, completed the following steps on your Jenkins server as the Uduntu user
+
 ````
 # cd /opt
 # sudo git clone https://github.com/dmccuk/spec-tests.git
@@ -10,24 +12,49 @@ Install the following packages:
 # sudo apt-get install ruby bundler  
 ````
 
-Create this file:
+Check this file
 ````
-# sudo vi Gemfile 
-````
-Add this contents:
-==below this line==
-````
+# cat Gemfile 
 source 'https://rubygems.org'
 gem 'serverspec'
 gem 'rake', '~>12.0.0'
 gem 'net-ssh', '~>3.0.2'
 ````
-==above this line==
 
 Run the following commands:
 ````
-# sudo bundle 
-# sudo gem install serverspec 
+# sudo bundle
+Don't run Bundler as root. Bundler can ask for sudo if it is needed, and installing your bundle as root will break this application
+for all non-root users on this machine.
+Fetching gem metadata from https://rubygems.org/...........
+Fetching version metadata from https://rubygems.org/..
+Installing rake 12.0.0
+Installing diff-lcs 1.3
+Installing multi_json 1.13.1
+Installing net-ssh 3.0.2
+Using net-telnet 0.1.1
+Installing rspec-support 3.8.0
+Installing sfl 2.3
+Using bundler 1.11.2
+Installing net-scp 2.0.0
+Installing rspec-core 3.8.0
+Installing rspec-expectations 3.8.2
+Installing rspec-mocks 3.8.0
+Installing specinfra 2.77.0
+Installing rspec-its 1.3.0
+Installing rspec 3.8.0
+Installing serverspec 2.41.3
+Bundle complete! 3 Gemfile dependencies, 16 gems now installed.
+Use `bundle show [gemname]` to see where a bundled gem is installed.
+
+# sudo gem install serverspec
+Fetching: serverspec-2.41.5.gem (100%)
+Successfully installed serverspec-2.41.5
+Parsing documentation for serverspec-2.41.5
+Installing ri documentation for serverspec-2.41.5
+Done installing documentation for serverspec after 0 seconds
+1 gem installed
+
 # sudo serverspec-init 
 
 Select OS type:
@@ -46,24 +73,14 @@ Input target host name: web01.example.com
  + spec/spec_helper.rb
  + Rakefile
  + .rspec
-# sudo cp Rakefile Rakefile.OLD 
-# sudo vi Rakefile 
-````
-You will see an error because we already have the file in place as par of the git clone.
 
-<details>
- <summary>Expand if Not doing the course</summary>
-  <p>
-Hold down "d" to delete all the contents of the file. Then press "Esc" and "i" to insert.
-
-Add this contents:
-
-==below this line==
+# cat Rakefile 
 ````
 require 'rake'
 require 'rspec/core/rake_task'
 hosts = %w(
-   web01
+  <server1>
+  <server2>
 )
 task :spec => 'spec:all'
 namespace :spec do
@@ -80,18 +97,10 @@ namespace :spec do
   end
 end
 ````
-==above this line==
 
-Now to create our tests:
+Now check the pre-defined tests:
 ````
-# sudo mkdir /opt/spec-tests/spec/base 
-# sudo vi /opt/spec-tests/spec/base/base_spec.rb 
-````
-Add this contents:
-
-
-==below this line==
-````
+# cat /opt/spec-tests/spec/base/base_spec.rb 
 require 'spec_helper'
 describe package('nginx') do
   it { should be_installed }
@@ -106,21 +115,16 @@ end
 describe port(22) do
   it { should be_listening }
 end
-
 ````
-==above this line==
-
-</p></details>
 
 Run these commands
 ````
-# cd /opt/spec-tests 
-# sudo mkdir reports 
-# sudo chmod 777 reports 
+# sudo mkdir /opt/spec-tests/reports 
+# sudo chmod 777 reports
 ````
 
 <details>
- <summary>Only do the following if you don't already have an SSH-KEY PAIR setup.</summary>
+ <summary>Only do the following if you don't already have an SSH-KEY PAIR setup. <NOT if you're doing the Devops Tools course!></summary>
   <p>
     
 Setup a private/public key pair:
@@ -177,18 +181,26 @@ If you get this we can move on to running the tests:
 
 </p></details>
 
-Update the Rakefile with the servers you want to run against:
+Update the Rakefile with the servers you want to run against. This will be the FQDN of your AWS servers:
 ````
 hosts = %w(
-  <server1>
-  <server2>
+  ec2-18-197-99-47.eu-central-1.compute.amazonaws.com
+  ec2-3-125-42-34.eu-central-1.compute.amazonaws.com
 )
 ````
-Replace server1 &2 adding the DNS long name for your servers. I.E: ec2-51-56-173-156.eu-west-1.compute.amazonaws.com
 
+Before we run our tests against our webservers, let change the ownershop of the serverspec over to the jenkins user. 
+
+As the Ubuntu user:
 ````
-# cd /opt/spec-tests 
+$ cd /opt
+$ sudo chown -R jenkins. spec-tests/
+$ sudo su - jenkins
+$ cd /opt/spec-tests
+````
 
+Now you are ready to run the tests against your webservers
+````
 $ rake spec
 /usr/bin/ruby2.3 -I/var/lib/gems/2.3.0/gems/rspec-support-3.8.0/lib:/var/lib/gems/2.3.0/gems/rspec-core-3.8.0/lib /var/lib/gems/2.3.0/gems/rspec-core-3.8.0/exe/rspec --pattern spec/\{base,ec\}/\*_spec.rb
 
@@ -217,10 +229,9 @@ Check https://serverspec.org/resource_types.html for more tests.
 
 Copy one of the reports generated to the /vagrant folder on the devops-vm. You can access this from your laptop and open the webpage to view the results.
 
+If you are using the vagrant VM, copy the report to your PC using the following command:
 ````
 vagrant@devops-box:/opt/spec-tests$ cp reports/ec2-3-8-126-230.eu-west-2.compute.amazonaws.com.html /vagrant/
 ````
-
-
 
 
