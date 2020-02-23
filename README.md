@@ -3,7 +3,7 @@ ServerSpec installation walk-through
 ServerSpec install
 Install the following packages:
 
-  * For the purposes of this test, completed the following steps on your Jenkins server as the Uduntu user
+  * For the purposes of this test, completed the following steps on your Jenkins server as the ubuntu user
 
 ````
 # cd /opt
