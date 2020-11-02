@@ -76,10 +76,18 @@ Input target host name: web01.example.com
 
 ````
 
-Now, update the Rakefile with the Servernames of the two webservers used in your Jenkins Setup I.E: <server*>.
+Update the Rakefile with the servers you want to run against. This will be the FQDN of your AWS servers:
 
-  * Get the names from the AWS console. ServerSpec uses the FQDN of each host.
   * ````sudo vi Rakefile````
+
+````
+hosts = %w(
+  ec2-18-197-99-47.eu-central-1.compute.amazonaws.com
+  ec2-3-125-42-34.eu-central-1.compute.amazonaws.com
+)
+````
+
+Your Rakefile should be configured now.
 
 ````
 # cat Rakefile 
@@ -131,7 +139,7 @@ Run these commands
 ````
 
 <details>
- <summary>Only do the following if you don't already have an SSH-KEY PAIR setup. <NOT if you're doing the Devops Tools course!></summary>
+ <summary>IGNORE IF DOING THE DevOps COURSE: Only do this section if you don't already have an SSH-KEY PAIR setup.</summary>
   <p>
     
 Setup a private/public key pair:
@@ -188,15 +196,8 @@ If you get this we can move on to running the tests:
 
 </p></details>
 
-Update the Rakefile with the servers you want to run against. This will be the FQDN of your AWS servers:
-````
-hosts = %w(
-  ec2-18-197-99-47.eu-central-1.compute.amazonaws.com
-  ec2-3-125-42-34.eu-central-1.compute.amazonaws.com
-)
-````
 
-Before we run our tests against our webservers, let change the ownershop of the serverspec over to the jenkins user. 
+Now we can continue - Before we run our tests against our webservers, let change the ownership of the serverspec over to the jenkins user. 
 
 As the Ubuntu user:
 ````
