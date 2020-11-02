@@ -74,6 +74,13 @@ Input target host name: web01.example.com
  + Rakefile
  + .rspec
 
+````
+
+Now, update the Rakefile with the Servernames of the two webservers used in your Jenkins Setup I.E: <server*>.
+
+  * Get the names from the AWS console. ServerSpec uses the FQDN of each host.
+
+````
 # cat Rakefile 
 require 'rake'
 require 'rspec/core/rake_task'
