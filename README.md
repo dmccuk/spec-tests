@@ -9,7 +9,7 @@ Install the following packages:
 # cd /opt
 # sudo git clone https://github.com/dmccuk/spec-tests.git
 # cd spec-tests
-# sudo apt-get install ruby bundler  
+# sudo apt-get install ruby bundler -y
 ````
 
 Check this file
